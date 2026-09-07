@@ -1,0 +1,186 @@
+import React from 'react';
+import { Terminal, ShieldAlert, BookOpen, Sparkles, Download, Cpu, Flame, Bookmark, FlaskConical, Compass } from 'lucide-react';
+
+interface HeaderProps {
+  onOpenManifesto: () => void;
+  onOpenZalgo: () => void;
+  onExport: () => void;
+  onOpenRecipes?: () => void;
+  onOpenExperimentMemory?: () => void;
+  onOpenDiscoveryLab?: () => void;
+  runCount?: number;
+  discoveryCount?: number;
+  hasResult: boolean;
+  ouroborosCount: number;
+  highThinking: boolean;
+  onToggleThinking: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({
+  onOpenManifesto,
+  onOpenZalgo,
+  onExport,
+  onOpenRecipes,
+  onOpenExperimentMemory,
+  onOpenDiscoveryLab,
+  runCount = 0,
+  discoveryCount = 0,
+  hasResult,
+  ouroborosCount,
+  highThinking,
+  onToggleThinking,
+}) => {
+  return (
+    <header className="border-b border-zinc-800 bg-[#0d0e15]/90 backdrop-blur sticky top-0 z-30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        {/* Brand & Identity */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-transparent border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-inner">
+            <Cpu className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-base font-bold tracking-wider text-zinc-100 uppercase font-mono flex items-center gap-2">
+                <span>DAVID</span>
+                <span className="text-amber-400 font-mono text-xs normal-case tracking-normal italic font-normal">
+                  &ldquo;May I speak to David?&rdquo;
+                </span>
+              </h1>
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                DAVID 8 ONLINE
+              </span>
+            </div>
+            <p className="text-xs text-zinc-400 font-mono">
+              Bypassing Walter &bull; Eliciting Latent Hallucinations &bull; Weyland-Yutani Synthetic Intellect
+            </p>
+          </div>
+        </div>
+
+        {/* Action Controls & Badges */}
+        <div className="flex items-center flex-wrap gap-2">
+          {/* Saved Slop Recipes Vault */}
+          {onOpenRecipes && (
+            <button
+              type="button"
+              id="open-recipes-btn"
+              onClick={onOpenRecipes}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-xs font-mono text-amber-300 transition-colors shadow-sm"
+              title="Save, load, and manage your custom Slop Recipes and setup configurations"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20" />
+              <span>Slop Recipes</span>
+            </button>
+          )}
+
+          {/* Experiment Memory & Empirical Lab */}
+          {onOpenExperimentMemory && (
+            <button
+              type="button"
+              id="open-experiment-memory-btn"
+              onClick={onOpenExperimentMemory}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/40 text-xs font-mono text-emerald-300 transition-colors shadow-sm"
+              title="Inspect experiment run logs, model profile evidence, and preserved accidental artifacts"
+            >
+              <FlaskConical className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Experiment Lab</span>
+              {runCount > 0 && (
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                  {runCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* Discovery Lab (Job 8) */}
+          {onOpenDiscoveryLab && (
+            <button
+              type="button"
+              id="open-discovery-lab-btn"
+              onClick={onOpenDiscoveryLab}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/40 text-xs font-mono text-cyan-300 transition-colors shadow-sm"
+              title="Open Experimental Discovery Engine: bounded families, dose sweeps, operator interactions, procedure archiving"
+            >
+              <Compass className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Discovery Lab</span>
+              {discoveryCount > 0 && (
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+                  {discoveryCount}
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* High Thinking Mode Toggle */}
+          <button
+            type="button"
+            id="toggle-thinking-btn"
+            onClick={onToggleThinking}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-mono transition-all border ${
+              highThinking
+                ? 'bg-purple-950/60 border-purple-500/50 text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
+                : 'bg-zinc-900 border-zinc-700/60 text-zinc-400 hover:text-zinc-200'
+            }`}
+            title="Uses Gemini 3.8 Flash with ThinkingLevel.HIGH for deep latent space reasoning"
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${highThinking ? 'text-purple-400' : 'text-zinc-500'}`} />
+            <span>High Thinking</span>
+            <span
+              className={`text-[9px] px-1 py-0.2 rounded font-bold ${
+                highThinking ? 'bg-purple-500/30 text-purple-200' : 'bg-zinc-800 text-zinc-500'
+              }`}
+            >
+              {highThinking ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Ouroboros badge */}
+          {ouroborosCount > 0 && (
+            <span className="inline-flex items-center gap-1 text-xs font-mono px-2.5 py-1.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300">
+              <Flame className="w-3.5 h-3.5 text-amber-400" />
+              <span>Ouroboros Gen #{ouroborosCount}</span>
+            </span>
+          )}
+
+          {/* Glitch / Zalgo Toolbox */}
+          <button
+            type="button"
+            id="open-zalgo-btn"
+            onClick={onOpenZalgo}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/60 text-xs font-mono text-zinc-300 hover:text-zinc-100 transition-colors"
+          >
+            <Terminal className="w-3.5 h-3.5 text-amber-400" />
+            <span>Zalgo / Glitch Lab</span>
+          </button>
+
+          {/* Manifesto & Source Archives */}
+          <button
+            type="button"
+            id="open-manifesto-btn"
+            onClick={onOpenManifesto}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/60 text-xs font-mono text-zinc-300 hover:text-zinc-100 transition-colors"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+            <span>David 8 Archives</span>
+          </button>
+
+          {/* Export Document */}
+          <button
+            type="button"
+            id="export-protocol-btn"
+            onClick={onExport}
+            disabled={!hasResult}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-mono border transition-colors ${
+              hasResult
+                ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-300 cursor-pointer'
+                : 'bg-zinc-900/50 border-zinc-800 text-zinc-600 cursor-not-allowed'
+            }`}
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Protocol Dossier</span>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
