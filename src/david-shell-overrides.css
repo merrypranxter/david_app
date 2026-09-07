@@ -1,0 +1,74 @@
+/* Mid-size screens keep the workspace rail compact instead of covering the creator. */
+@media (min-width: 801px) and (max-width: 1179px) {
+  .david-ux-rail {
+    width: 58px;
+    left: 8px;
+    padding: 6px;
+  }
+
+  .david-ux-rail button {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .david-ux-rail button span {
+    display: none;
+  }
+
+  body.david-shell header > div,
+  body.david-shell main,
+  body.david-shell footer {
+    transform: translateX(28px);
+    max-width: calc(100% - 72px);
+  }
+
+  .david-workspace-banner {
+    left: 78px;
+  }
+}
+
+/* Mutation Lab: on phones, stop forcing the title, AUTO/CURATED, roll button,
+   and close control onto one microscopic row. */
+@media (max-width: 800px) {
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) {
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) > div {
+    max-height: 100dvh !important;
+    height: 100dvh;
+    border-radius: 0 !important;
+    border-inline: 0 !important;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) > div > div:first-child {
+    flex-wrap: wrap;
+    gap: 0.65rem !important;
+    padding: 0.85rem 0.9rem !important;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) > div > div:first-child > div:first-child {
+    min-width: 0;
+    flex: 1 1 15rem;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) > div > div:first-child > div:last-child {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) h2 {
+    font-size: 0.78rem !important;
+    line-height: 1.25 !important;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) form {
+    width: 100%;
+  }
+
+  div.fixed.inset-0:has(button[title*="Randomize compatible operators"]) form input {
+    min-width: 0;
+    flex: 1;
+  }
+}
