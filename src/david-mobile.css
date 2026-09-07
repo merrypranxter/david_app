@@ -1,0 +1,280 @@
+/* Dedicated portrait-phone interface for DAVID. Desktop/tablet rules remain intact. */
+
+[data-david-pressed='true'] {
+  outline: 2px solid rgba(255, 245, 0, 0.7) !important;
+  outline-offset: 2px;
+  filter: brightness(1.18) saturate(1.08);
+  transform: scale(0.985);
+  transition: transform 90ms ease, filter 90ms ease, outline-color 90ms ease;
+}
+
+.david-action-feedback {
+  position: fixed;
+  z-index: 140;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  max-width: min(520px, calc(100vw - 28px));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 13px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  background: rgba(5,5,7,0.96);
+  color: white;
+  box-shadow: 0 14px 48px rgba(0,0,0,0.58);
+  backdrop-filter: blur(18px);
+  font: 700 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+  animation: davidFeedbackIn 150ms ease-out;
+  pointer-events: none;
+}
+
+.david-action-feedback svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.david-action-feedback--success { border-color: rgba(0,245,28,0.42); }
+.david-action-feedback--success svg { color: #00f51c; }
+.david-action-feedback--info { border-color: rgba(18,215,230,0.42); }
+.david-action-feedback--info svg { color: #12d7e6; }
+.david-action-feedback--working { border-color: rgba(255,75,0,0.52); }
+.david-action-feedback--working svg { color: #ff7b23; }
+
+@keyframes davidFeedbackIn {
+  from { opacity: 0; transform: translate(-50%, 8px) scale(0.985); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@media (max-width: 800px) {
+  html, body, #root { min-width: 0; width: 100%; overflow-x: hidden; }
+
+  body.david-shell {
+    background: #050505 !important;
+  }
+
+  /* Compact phone header: identity first, chrome second. */
+  body.david-shell .david-header > div {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+
+  body.david-shell .david-header .david-display-font {
+    font-size: 1.08rem !important;
+  }
+
+  body.david-shell .david-header button {
+    min-height: 40px;
+  }
+
+  body.david-shell main {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 12px 10px 116px !important;
+    margin: 0 !important;
+    transform: none !important;
+    space-y: 0;
+  }
+
+  /* Main create workbench becomes edge-to-edge and intentionally vertical. */
+  body.david-shell main > div:has(#operative-concept-input) {
+    border-radius: 14px !important;
+    padding: 12px !important;
+    box-shadow: none !important;
+    border-color: rgba(255,255,255,0.1) !important;
+  }
+
+  body.david-shell main > div:has(#operative-concept-input) > * {
+    min-width: 0;
+  }
+
+  /* Presets and mode chooser stack instead of fighting for horizontal room. */
+  body.david-shell main > div:has(#operative-concept-input) > div:first-child {
+    align-items: stretch !important;
+  }
+
+  body.david-shell #seed-preset-select {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 42px;
+  }
+
+  body.david-shell [id^='mode-btn-'] {
+    min-height: 38px;
+    flex: 1;
+  }
+
+  /* Engine choice is a thumb-scroll rail, never a seven-card wall. */
+  body.david-shell div:has(> #target-engine-suno) {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    gap: 8px !important;
+    padding: 2px 1px 8px;
+    margin-inline: -1px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  body.david-shell div:has(> #target-engine-suno)::-webkit-scrollbar { display: none; }
+
+  body.david-shell div:has(> #target-engine-suno) > button {
+    flex: 0 0 74vw;
+    max-width: 290px;
+    min-width: 220px;
+    min-height: 66px;
+    scroll-snap-align: center;
+  }
+
+  /* The prompt is the visual center of gravity. */
+  body.david-shell #operative-concept-input {
+    min-height: 180px !important;
+    font-size: 16px !important; /* avoids iOS focus zoom */
+    line-height: 1.55 !important;
+    padding: 13px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Quick-injection chips become a swipe lane rather than wrapping into a wall. */
+  body.david-shell #operative-concept-input + div {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.david-shell #operative-concept-input + div::-webkit-scrollbar { display: none; }
+  body.david-shell #operative-concept-input + div > * { flex: 0 0 auto; }
+
+  /* Simple mode should truly be simple on a phone. */
+  body.david-shell:not(.david-advanced)
+    main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card) {
+    max-height: 86px !important;
+  }
+
+  body.david-shell:not(.david-advanced)
+    main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card)::after {
+    content: 'Advanced mutation controls hidden · tap EXPERT in the bottom dock';
+    padding-bottom: 7px;
+  }
+
+  /* Expert sections become one-column phone cards. */
+  body.david-shell.david-advanced #paradox-engine-card,
+  body.david-shell.david-advanced #modular-pipeline-container {
+    border-radius: 12px !important;
+  }
+
+  body.david-shell.david-advanced #modular-pipeline-container {
+    padding: 12px !important;
+  }
+
+  /* Bottom controls stop pretending to be desktop toolbar. */
+  body.david-shell #synthesize-button {
+    width: 100% !important;
+    min-height: 54px !important;
+    font-size: 13px !important;
+    border-radius: 12px !important;
+  }
+
+  body.david-shell label:has(#search-grounding-checkbox),
+  body.david-shell #save-recipe-trigger-btn,
+  body.david-shell #open-recipes-trigger-btn {
+    min-height: 42px;
+  }
+
+  /* Mutation Lab becomes a true mobile full-screen workspace. */
+  body.david-shell div.fixed.inset-0.z-50 {
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+
+  body.david-shell div.fixed.inset-0.z-50 > div {
+    width: 100vw !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  body.david-shell div.fixed.inset-0.z-50 > div > div:first-child {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 10px 12px !important;
+  }
+
+  /* Mutation Lab tab rows are horizontally swipable; content stays single-column. */
+  body.david-shell div.fixed.inset-0.z-50 .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  body.david-shell div.fixed.inset-0.z-50 .overflow-x-auto::-webkit-scrollbar { display: none; }
+
+  body.david-shell div.fixed.inset-0.z-50 [class*='grid-cols-2'],
+  body.david-shell div.fixed.inset-0.z-50 [class*='md:grid-cols-2'],
+  body.david-shell div.fixed.inset-0.z-50 [class*='md:grid-cols-3'] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  /* Touch targets: phones should never require pixel-perfect taps. */
+  body.david-shell button,
+  body.david-shell select,
+  body.david-shell input[type='checkbox'] {
+    touch-action: manipulation;
+  }
+
+  body.david-shell button:not(.sr-only) {
+    min-height: 38px;
+  }
+
+  /* Bottom workspace dock sits above the home indicator and becomes the phone nav. */
+  .david-ux-rail {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+    height: 72px !important;
+    padding: 5px !important;
+    border-radius: 17px !important;
+    background: rgba(4,4,5,0.96) !important;
+  }
+
+  .david-ux-rail button {
+    min-height: 58px !important;
+    border-radius: 11px !important;
+  }
+
+  .david-help-drawer,
+  .david-library-drawer {
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+  }
+
+  .david-action-feedback {
+    bottom: calc(env(safe-area-inset-bottom) + 88px);
+    width: auto;
+    max-width: calc(100vw - 24px);
+    min-height: 42px;
+    font-size: 11px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+  body.david-shell main { padding-inline: 8px !important; }
+  body.david-shell .david-header > div { padding-inline: 10px !important; }
+
+  body.david-shell div:has(> #target-engine-suno) > button {
+    flex-basis: 82vw;
+    min-width: 0;
+  }
+
+  body.david-shell [id^='mode-btn-'] {
+    padding-inline: 7px !important;
+    font-size: 10px !important;
+  }
+}
