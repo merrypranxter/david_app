@@ -1,1 +1,623 @@
 @import "tailwindcss";
+
+:root {
+  --david-black: #050505;
+  --david-panel: #0d0e13;
+  --david-panel-2: #12141c;
+  --david-border: #2a2d36;
+  --david-white: #ffffff;
+  --david-gray: #9b9b9f;
+  --david-yellow: #fff500;
+  --david-purple: #6800ff;
+  --david-orange: #ff4b00;
+  --david-pink: #ff00b8;
+  --david-green: #00f51c;
+  --david-cyan: #12d7e6;
+}
+
+html {
+  background: var(--david-black);
+  color-scheme: dark;
+}
+
+body.david-shell {
+  background:
+    radial-gradient(circle at 18% -10%, rgba(104, 0, 255, 0.08), transparent 28rem),
+    radial-gradient(circle at 88% 12%, rgba(18, 215, 230, 0.055), transparent 26rem),
+    var(--david-black);
+  color: var(--david-white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body.david-shell main {
+  padding-bottom: 8.5rem;
+}
+
+.david-display-font {
+  font-family: "Anatol MN", "Arial Black", Impact, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Simplified primary workspace                                                */
+/* -------------------------------------------------------------------------- */
+
+body.david-shell #discovery-lab-section {
+  display: none;
+}
+
+body.david-shell.david-lab-open #discovery-lab-section {
+  display: block;
+}
+
+body.david-shell.david-lab-open main > *:not(#discovery-lab-section) {
+  display: none !important;
+}
+
+body.david-shell.david-lab-open #discovery-lab-section > * {
+  content-visibility: auto;
+  contain-intrinsic-size: 850px;
+}
+
+/* In Simple mode keep the useful quick-mutation header, but collapse the wall
+   of advanced paradox controls and hide the pipeline. */
+body.david-shell:not(.david-advanced)
+  main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card) {
+  max-height: 112px;
+  overflow: hidden;
+  position: relative;
+}
+
+body.david-shell:not(.david-advanced)
+  main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card)::after {
+  content: "Advanced mutation controls hidden · switch SIMPLE → EXPERT to open";
+  position: absolute;
+  inset: auto 0 0;
+  padding: 0.45rem 0.75rem;
+  text-align: center;
+  font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.46);
+  background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.98) 42%);
+  pointer-events: none;
+}
+
+body.david-shell:not(.david-advanced) #modular-pipeline-container {
+  display: none !important;
+}
+
+body.david-shell.david-advanced #modular-pipeline-container,
+body.david-shell.david-advanced main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card) {
+  animation: davidReveal 180ms ease-out;
+}
+
+@keyframes davidReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile engine selector becomes a swipe rail instead of seven stacked cards. */
+@media (max-width: 767px) {
+  body.david-shell div:has(> #target-engine-suno) {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0.55rem !important;
+    padding-bottom: 0.35rem;
+    scrollbar-width: none;
+  }
+
+  body.david-shell div:has(> #target-engine-suno)::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.david-shell div:has(> #target-engine-suno) > button {
+    min-width: 10.5rem;
+    scroll-snap-align: start;
+  }
+}
+
+/* Make the main creator feel like one workbench, not stacked nested cards. */
+body.david-shell main > div:has(#operative-concept-input) {
+  background: rgba(9, 10, 14, 0.94) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.48) !important;
+}
+
+body.david-shell #operative-concept-input {
+  min-height: 7.25rem;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: #030303 !important;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+body.david-shell #operative-concept-input:focus {
+  border-color: var(--david-yellow) !important;
+  box-shadow: 0 0 0 1px rgba(255, 245, 0, 0.28), 0 0 26px rgba(255, 245, 0, 0.08);
+}
+
+body.david-shell #synthesize-button {
+  background: linear-gradient(90deg, #ff9d00 0%, var(--david-orange) 100%) !important;
+  min-height: 2.85rem;
+  border-radius: 0.75rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 34px rgba(255, 75, 0, 0.24) !important;
+}
+
+body.david-shell #synthesize-button:not(:disabled):hover {
+  filter: brightness(1.09) saturate(1.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Contextual little ? marks                                                   */
+/* -------------------------------------------------------------------------- */
+
+.david-helpable {
+  position: relative;
+}
+
+.david-helpable::after {
+  content: "?";
+  display: inline-grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  margin-left: 5px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  color: rgba(255,255,255,0.68);
+  background: rgba(255,255,255,0.04);
+  font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  vertical-align: middle;
+  cursor: help;
+  transition: 120ms ease;
+}
+
+.david-helpable:hover::after {
+  color: #020202;
+  background: var(--david-cyan);
+  border-color: var(--david-cyan);
+  box-shadow: 0 0 16px rgba(18, 215, 230, 0.22);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Global workspaces rail                                                      */
+/* -------------------------------------------------------------------------- */
+
+.david-ux-overlay {
+  position: relative;
+  z-index: 80;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.david-ux-rail {
+  position: fixed;
+  left: 14px;
+  top: 92px;
+  bottom: 18px;
+  width: 142px;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px;
+  border: 1px solid rgba(255,255,255,0.11);
+  border-radius: 16px;
+  background: rgba(5,5,5,0.90);
+  box-shadow: 0 18px 70px rgba(0,0,0,0.56);
+  backdrop-filter: blur(18px);
+}
+
+.david-ux-rail button {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #a8a8ad;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: left;
+  transition: 140ms ease;
+}
+
+.david-ux-rail button svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.david-ux-rail button:hover {
+  color: white;
+  background: rgba(255,255,255,0.055);
+  border-color: rgba(255,255,255,0.09);
+}
+
+.david-ux-rail button.is-active {
+  color: var(--david-yellow);
+  border-color: rgba(255,245,0,0.36);
+  background: rgba(255,245,0,0.08);
+  box-shadow: inset 3px 0 0 var(--david-yellow);
+}
+
+.david-ux-rail button.library { color: #ff78da; }
+.david-ux-rail button.lab { color: #b491ff; }
+.david-ux-rail button.advanced { color: var(--david-cyan); }
+.david-ux-rail button.help { color: var(--david-cyan); }
+.david-ux-rail button.reset { color: #a3a3a8; }
+.david-ux-rail-spacer { flex: 1; }
+
+@media (min-width: 1180px) {
+  body.david-shell header > div,
+  body.david-shell main,
+  body.david-shell footer {
+    transform: translateX(74px);
+    max-width: calc(80rem - 36px);
+  }
+}
+
+/* Mobile dock: thumb-friendly and safe-area aware. */
+@media (max-width: 800px) {
+  .david-ux-rail {
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom) + 10px);
+    width: auto;
+    height: 68px;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2px;
+    padding: 5px;
+    border-radius: 18px;
+  }
+
+  .david-ux-rail button {
+    flex: 1;
+    min-width: 0;
+    min-height: 54px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px 2px;
+    font-size: 8px;
+    text-align: center;
+  }
+
+  .david-ux-rail button.is-active {
+    box-shadow: inset 0 -3px 0 currentColor;
+  }
+
+  .david-ux-rail-spacer,
+  .david-ux-rail .reset {
+    display: none;
+  }
+
+  body.david-shell main {
+    padding-bottom: 7.4rem;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Drawers and help manual                                                     */
+/* -------------------------------------------------------------------------- */
+
+.david-help-drawer,
+.david-library-drawer {
+  position: fixed;
+  z-index: 90;
+  top: 78px;
+  right: 16px;
+  bottom: 16px;
+  width: min(390px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 18px;
+  background: rgba(5, 7, 10, 0.97);
+  box-shadow: 0 26px 100px rgba(0,0,0,0.68);
+  backdrop-filter: blur(22px);
+  animation: davidDrawerIn 170ms ease-out;
+}
+
+@keyframes davidDrawerIn {
+  from { opacity: 0; transform: translateX(12px) scale(0.992); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.david-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.david-drawer-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.david-drawer-head .david-display-font {
+  font-size: 1.15rem;
+  color: white;
+}
+
+.david-drawer-head small {
+  color: #7d7e85;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.david-drawer-head > button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: #aaa;
+  background: rgba(255,255,255,0.04);
+}
+
+.david-drawer-head > button:hover { color: white; background: rgba(255,255,255,0.09); }
+.david-drawer-head > button svg { width: 17px; }
+
+.david-help-search {
+  margin: 14px 14px 0;
+  position: relative;
+}
+
+.david-help-search svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  color: #73757b;
+}
+
+.david-help-search input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px 0 34px;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 10px;
+  outline: none;
+  color: white;
+  background: #0b0d12;
+  font-size: 12px;
+}
+
+.david-help-search input:focus { border-color: rgba(18,215,230,0.68); }
+
+.david-help-article,
+.david-help-results,
+.david-library-actions {
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.david-help-title-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.david-help-title-row svg {
+  width: 24px;
+  color: var(--david-cyan);
+}
+
+.david-help-title-row h2 {
+  margin: 0;
+  font-family: "Anatol MN", "Arial Black", Impact, system-ui, sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.david-help-article section {
+  margin-bottom: 18px;
+}
+
+.david-help-article h3 {
+  margin: 0 0 7px;
+  color: var(--david-cyan);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+}
+
+.david-help-article p,
+.david-help-article li {
+  color: #c5c6ca;
+  font-size: 12px;
+  line-height: 1.62;
+}
+
+.david-help-article ul,
+.david-help-article ol {
+  padding-left: 1.15rem;
+  margin: 0;
+}
+
+.david-help-tip {
+  padding: 14px;
+  border: 1px solid rgba(255,245,0,0.33);
+  border-radius: 12px;
+  background: #f7f7f4;
+}
+
+.david-help-tip > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #111;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+}
+
+.david-help-tip svg { width: 14px; color: #111; }
+.david-help-tip p { margin: 6px 0 0; color: #242424; }
+
+.david-help-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.david-help-results button,
+.david-library-actions button {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 13px;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: white;
+  background: rgba(255,255,255,0.035);
+}
+
+.david-help-results button:hover,
+.david-library-actions button:hover {
+  border-color: rgba(18,215,230,0.38);
+  background: rgba(18,215,230,0.055);
+}
+
+.david-help-results button {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.david-help-results strong,
+.david-library-actions strong {
+  font-size: 12px;
+}
+
+.david-help-results small,
+.david-library-actions small {
+  display: block;
+  margin-top: 3px;
+  color: #878991;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.david-library-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.david-library-actions button > svg {
+  width: 18px;
+  flex: 0 0 auto;
+  color: var(--david-cyan);
+}
+
+.david-library-actions button:first-child > svg { color: var(--david-yellow); }
+.david-library-actions button:nth-child(2) > svg { color: var(--david-green); }
+.david-library-actions button:nth-child(4) > svg { color: var(--david-pink); }
+.david-library-actions button:nth-child(5) > svg { color: var(--david-purple); }
+
+.david-library-utility {
+  margin-top: auto;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,0.09);
+}
+
+.david-library-utility button {
+  min-height: 40px;
+  border: 1px solid rgba(255,255,255,0.11);
+  border-radius: 10px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  color: #c5c5c8;
+  background: rgba(255,255,255,0.035);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.david-library-utility button svg { width: 14px; }
+.david-library-utility button.danger { color: #111; background: var(--david-orange); border-color: var(--david-orange); }
+
+.david-workspace-banner {
+  position: fixed;
+  z-index: 70;
+  left: 174px;
+  right: 18px;
+  top: 76px;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  border: 1px solid rgba(104,0,255,0.36);
+  border-radius: 14px;
+  background: rgba(10,7,17,0.94);
+  box-shadow: 0 12px 50px rgba(0,0,0,0.42);
+  backdrop-filter: blur(15px);
+}
+
+.david-workspace-banner > div { display: flex; flex-direction: column; }
+.david-workspace-banner .david-display-font { color: #b995ff; font-size: 1rem; }
+.david-workspace-banner small { color: #777985; font-size: 9px; }
+.david-workspace-banner button {
+  padding: 7px 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 9px;
+  color: #ddd;
+  background: rgba(255,255,255,0.04);
+  font-size: 10px;
+}
+
+@media (max-width: 800px) {
+  .david-help-drawer,
+  .david-library-drawer {
+    top: auto;
+    left: 8px;
+    right: 8px;
+    bottom: calc(env(safe-area-inset-bottom) + 84px);
+    width: auto;
+    max-height: min(72vh, 650px);
+    border-radius: 20px;
+    animation-name: davidSheetIn;
+  }
+
+  @keyframes davidSheetIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .david-workspace-banner {
+    left: 10px;
+    right: 10px;
+    top: 76px;
+  }
+
+  body.david-shell:not(.david-advanced)
+    main > div:has(#operative-concept-input) > div:has(> #paradox-engine-card) {
+    max-height: 135px;
+  }
+}
